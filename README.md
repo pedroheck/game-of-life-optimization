@@ -1,8 +1,73 @@
 # Game of Life Application
 
-This repository contains two implementations of Conway's Game of Life:
+Welcome to the Game of Life Application repository. This project showcases two implementations of Conway's Game of Life: a basic version and an optimized version. Each version is designed to illustrate different aspects of the implementation and optimization of the Game of Life algorithm.
 
-1. **Basic Implementation**: A straightforward version of the Game of Life without optimizations, demonstrating the basic rules and visualization of the cellular automaton.
-2. **Optimized Implementation**: An enhanced version of the Game of Life, featuring various optimizations for performance and visual improvements.
+## Table of Contents
+- [Introduction](#introduction)
+- [Basic Implementation](#basic-implementation)
+- [Optimized Implementation](#optimized-implementation)
+- [How to Run](#how-to-run)
 
-The basic implementation serves as an educational tool to understand the fundamental concepts of the Game of Life, while the optimized version showcases techniques to improve efficiency and aesthetics.
+## Introduction
+
+Conway's Game of Life is a cellular automaton devised by the British mathematician John Horton Conway in 1970. It is a zero-player game, meaning that its evolution is determined by its initial state, with no further input from human players. The game consists of a grid of cells, each of which can be in one of two states: alive or dead. The state of the grid evolves over discrete time steps according to a set of simple rules.
+
+## Basic Implementation
+
+The **basic.py** script provides a straightforward implementation of the Game of Life, complete with visual enhancements for better cell state distinction. This version is ideal for educational purposes, demonstrating the fundamental principles and visual aesthetics of the Game of Life.
+
+### Features
+- Simple rules implementation
+- Visual enhancements with custom colormap
+- Age tracking for fading effects
+
+```python
+# To view the full code, see the basic.py file in this repository.
+```
+
+
+## Optimized Implementation
+The **optimized.py** script introduces several optimizations for improved performance, including the use of the Numba library to accelerate the update logic. This version is designed to handle larger grids and more complex simulations efficiently.
+
+### Features
+Optimized cell state updates using Numba
+Enhanced visual representation with a detailed colormap
+Improved performance for larger grids
+
+```python
+# To view the full code, see the optimized.py file in this repository.
+```
+
+## How to Run
+To run this code, you'll need to have Python installed on your machine along with the necessary libraries. The recommended way to install these dependencies is to use pip.
+
+### Prerequisites
+- Python 3.x
+- NumPy
+- Matplotlib
+- Numba (for the optimized version)
+
+## Installation
+1. Clone this repository:
+
+```sh
+git clone https://github.com/pedroheck/game-of-life-optimization.git
+cd game-of-life
+```
+2. Install the required Python packages:
+
+```sh
+pip install numpy matplotlib numba
+```
+
+## Running
+To run the basic implementation of the Game of Life:
+```python
+python basic.py
+```
+To run the optimized implementation of the Game of Life:
+```python
+python optimized.py
+```
+
+
