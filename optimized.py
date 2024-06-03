@@ -1,16 +1,16 @@
-# -------------------- Imports --------------------
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 from matplotlib.colors import LinearSegmentedColormap
+from numba import jit
 
-# ---------------- Initial settings ----------------
+# Configurações iniciais
 grid_size = 500
-initial_state = np.random.choice([0, 1], size=(grid_size, grid_size))
+initial_state = np.random.rand(grid_size, grid_size) > 0.8
 age_grid = np.zeros((grid_size, grid_size), dtype=int)
 
-# Custom colormap with fading effect
-max_age = 30
+# Configuração do Colormap
+max_age = 50
 alive_color = np.array([200/255, 255/255, 240/255, 1])  # Brighter color for alive cells #64FFC8
 fade_colors = np.array([
     [8/255, 238/255, 138/255, 1],   # #08EE8A
@@ -23,8 +23,8 @@ fade_steps = np.linspace(0, 1, max_age)
 fade_colors_interpolated = np.array([np.interp(fade_steps, [0, 0.5, 1], [fade_colors[0, i], fade_colors[1, i], fade_colors[2, i]]) for i in range(4)]).T
 
 # Combining alive color and fade colors
-colors = np.vstack((alive_color, fade_colors_interpolated[1:]))  # skip the first color (it is used for alive cells)
-# Adding #170325 for cells that haven't been alive yet
+colors = np.vstack((alive_color, fade_colors_interpolated[1:]))  # Skipping the first color (as it is used for alive cells)
+# Adding the darker shade for cells that haven't been alive yet
 colors = np.vstack(([23/255, 3/255, 37/255, 1], colors))
 cmap = LinearSegmentedColormap.from_list("my_colormap", colors)
 
@@ -35,18 +35,17 @@ ax.axis('off')
 # Removing extra padding
 plt.subplots_adjust(left=0, right=1, top=1, bottom=0)
 
-# -------------------- Functions --------------------
+@jit(nopython=True)
 def update_state(state, age_grid):
-    new_state = state.copy()
-    new_age_grid = age_grid.copy()
+    new_state = np.zeros_like(state)
+    new_age_grid = np.zeros_like(age_grid)
 
-    for y in range(grid_size):
-        for x in range(grid_size):
-            total = (state[y, (x-1)%grid_size] + state[y, (x+1)%grid_size] +
-                     state[(y-1)%grid_size, x] + state[(y+1)%grid_size, x] +
-                     state[(y-1)%grid_size, (x-1)%grid_size] + state[(y-1)%grid_size, (x+1)%grid_size] +
-                     state[(y+1)%grid_size, (x-1)%grid_size] + state[(y+1)%grid_size, (x+1)%grid_size])
-
+    for y in range(1, state.shape[0] - 1):
+        for x in range(1, state.shape[1] - 1):
+            total = (state[y-1, x-1] + state[y-1, x] + state[y-1, x+1] +
+                     state[y, x-1] + 0 + state[y, x+1] +
+                     state[y+1, x-1] + state[y+1, x] + state[y+1, x+1])
+            
             # Applying the rules of the Game of Life
             if state[y, x] == 1: # If cell is alive
                 if total < 2 or total > 3: # If the cell is undercrowded (< 2) or overcrowded (> 3), the cell dies
@@ -62,7 +61,9 @@ def update_state(state, age_grid):
                 else: # If the cell is not sorrounded by 3 alive cells, it remains dead
                     if age_grid[y, x] > 0:
                         new_age_grid[y, x] = age_grid[y, x] + 1  # Increasing the age for fading effect
-
+    
+    # Tratando as bordas do grid
+    new_state[0, :], new_state[:, 0], new_state[-1, :], new_state[:, -1] = 0, 0, 0, 0
     return new_state, new_age_grid
 
 def update(frame):
@@ -71,6 +72,6 @@ def update(frame):
     image.set_array(age_grid)
     return [image]
 
-ani = FuncAnimation(fig, update, blit=True, interval=100, cache_frame_data=False)
+ani = FuncAnimation(fig, update, blit=True, interval=10, cache_frame_data=False)
 
 plt.show()
