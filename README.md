@@ -1,6 +1,9 @@
 # Game of Life Application
 
-Welcome to the Game of Life Application repository. This project showcases two implementations of Conway's Game of Life: a basic version and an optimized version. Each version is designed to illustrate different aspects of the implementation and optimization of the Game of Life algorithm.
+Welcome to this very simple, yet interesting enough (to me) Game of Life Application repository. This project showcases two implementations of Conway's Game of Life: a basic and an optimized version. Each version is designed to illustrate different aspects of implementing and optimizing the Game of Life algorithm.
+
+![Game of Life Screenshot](img/screenshot.png)
+
 
 ## Table of Contents
 - [Introduction](#introduction)
