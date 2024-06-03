@@ -2,13 +2,20 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
+from matplotlib.colors import LinearSegmentedColormap
 
 # ---------------- Initial settings ----------------
 grid_size = 100
 initial_state = np.random.choice([0, 1], size=(grid_size, grid_size))
 
+# Custom colormap
+alive_color = np.array([100/255, 255/255, 200/255, 1])  # Brighter color for alive cells #64FFC8
+dead_color = np.array([23/255, 3/255, 37/255, 1])  # Dark color for dead cells #170325
+colors = np.array([dead_color, alive_color])
+cmap = LinearSegmentedColormap.from_list("custom_cmap", colors)
+
 fig, ax = plt.subplots(figsize=(10, 10))
-image = ax.imshow(initial_state, cmap='gray', vmin=0, vmax=1)
+image = ax.imshow(initial_state, cmap=cmap, vmin=0, vmax=1)
 ax.axis('off')
 
 # Removing extra padding
